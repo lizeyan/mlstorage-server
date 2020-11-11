@@ -311,7 +311,15 @@ export default {
     deleteDocs () {
       eventBus.setLoadingFlag(true);
       if (this.selectedExperiments && this.selectedExperiments.length > 0) {
-        const docIdList = this.selectedExperiments.map(doc => doc.id);
+        const hasStar = function (doc) {
+          let tags = doc.tags || [];
+          return tags.indexOf('star') < 0;
+        };
+        const docIdList = this.selectedExperiments.filter(doc => hasStar(doc))
+          .map(doc => doc.id);
+        if (docIdList.length < this.selectedExperiments.length) {
+          alert('Starred experiments would not be deleted. Unstar them first.');
+        }
         const self = this;
 
         const doDeleteOne = function (i) {
@@ -351,9 +359,31 @@ export default {
 
     exportSelectedExpId () {
       if (this.selectedExperiments && this.selectedExperiments.length > 0) {
-        let doc_id_list = this.selectedExperiments.map(doc => doc.id)
-        let doc_id_string = doc_id_list.join(" ")
-        navigator.clipboard.writeText(doc_id_string)
+        let docIdList = this.selectedExperiments.map(doc => doc.id);
+        let docIdString = docIdList.join(' ');
+        let textArea = document.createElement('textarea');
+        textArea.style.position = 'fixed';
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = '2em';
+        textArea.style.height = '2em';
+        textArea.style.padding = 0;
+        textArea.style.border = 'none';
+        textArea.style.outline = 'none';
+        textArea.style.boxShadow = 'none';
+        textArea.style.background = 'transparent';
+        textArea.value = docIdString;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          let successful = document.execCommand('copy');
+          let msg = successful ? 'successful' : 'unsuccessful';
+          console.log('Copying text command was ' + msg);
+        } catch (err) {
+          console.log('Oops, unable to copy');
+        }
+        document.body.removeChild(textArea);
       }
     },
 
