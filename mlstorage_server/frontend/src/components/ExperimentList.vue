@@ -59,6 +59,7 @@
                                     @starDocs="starDocs"
                                     @unStarDocs="unStarDocs"
                                     @selectAllClicked="selectAllClicked"
+                                    @exportDocsID="exportSelectedExpId"
                                     class="top-tool-bar">
           </experiment-list-tool-bar>
 
@@ -346,6 +347,14 @@ export default {
 
     unStarDocs () {
       this.setDocsStar(false);
+    },
+
+    exportSelectedExpId () {
+      if (this.selectedExperiments && this.selectedExperiments.length > 0) {
+        let doc_id_list = this.selectedExperiments.map(doc => doc.id)
+        let doc_id_string = doc_id_list.join(" ")
+        navigator.clipboard.writeText(doc_id_string)
+      }
     },
 
     setDocsStar (star) {

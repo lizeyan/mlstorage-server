@@ -18,6 +18,9 @@
         <b-button v-if="showCheckbox" :disabled="!selectedCount" @click="unStarClicked">
           UnStar<span v-if="showCheckbox"> ({{selectedCount}})</span>
         </b-button>
+        <b-button v-if="showCheckbox" :disabled="!selectedCount" @click="exportDocsIdClicked">
+          Export Id<span v-if="showCheckbox"> ({{selectedCount}})</span>
+        </b-button>
       </b-button-group>
 
       <b-button-group class="mx-1" size="sm">
@@ -110,6 +113,10 @@ export default {
 
     starClicked () {
       this.$emit('starDocs');
+    },
+
+    exportDocsIdClicked () {
+      this.$emit('exportDocsID')
     },
 
     unStarClicked () {
