@@ -116,7 +116,7 @@ export default {
     },
 
     exportDocsIdClicked () {
-      this.$emit('exportDocsID')
+      this.$emit('exportDocsID');
     },
 
     unStarClicked () {
